@@ -159,5 +159,88 @@ mspt -> runAction(rotateTo);
 ```
 - scale
 ```cpp
-ScaleBy::create(2, 3, 4); 
+//scale x by 3, y by 4 in 2 sec
+ScaleBy::create(2.0, 3.0, 4.0);
+//scale to 3 uniformly in 2 sec
+ScaleTo::create(2, 3);
+```
+
+- fadein & fadeout
+```cpp
+//in 1 sec
+FadeIn::create(1.0);
+FadeOut::create(2.0);
+```
+
+- tint
+mix color for a node object who support `NodeRGB` protocol
+```cpp
+//tints a node to the specific RGB values
+auto tintTo = TintTo::create(2.0, 120.0, 232.0, 254.0);
+
+//tints a node by the specific RGB values
+auto tintBy = TintBy::create(2.0, 120.0, 232.0, 254.0);
+```
+
+- frame anime
+```cpp
+auto mySprite = Sprite::create("mysprite.png");
+
+// now lets animate the sprite we moved
+Vector<SpriteFrame*> animFrames;
+animFrames.reserve(12);
+animFrames.pushBack(SpriteFrame::create("Blue_Front1.png", Rect(0,0,65,81)));
+animFrames.pushBack(SpriteFrame::create("Blue_Front2.png", Rect(0,0,65,81)));
+animFrames.pushBack(SpriteFrame::create("Blue_Front3.png", Rect(0,0,65,81)));
+animFrames.pushBack(SpriteFrame::create("Blue_Left1.png", Rect(0,0,65,81)));
+animFrames.pushBack(SpriteFrame::create("Blue_Left2.png", Rect(0,0,65,81)));
+animFrames.pushBack(SpriteFrame::create("Blue_Left3.png", Rect(0,0,65,81)));
+animFrames.pushBack(SpriteFrame::create("Blue_Back1.png", Rect(0,0,65,81)));
+animFrames.pushBack(SpriteFrame::create("Blue_Back2.png", Rect(0,0,65,81)));
+animFrames.pushBack(SpriteFrame::create("Blue_Back3.png", Rect(0,0,65,81)));
+animFrames.pushBack(SpriteFrame::create("Blue_Right1.png", Rect(0,0,65,81)));
+animFrames.pushBack(SpriteFrame::create("Blue_Right2.png", Rect(0,0,65,81)));
+animFrames.pushBack(SpriteFrame::create("Blue_Right3.png", Rect(0,0,65,81)));
+
+// create the animation out of the frames
+Animation* animation = Animation::createWithSpriteFrames(animFrames, 0.1f);
+Animate* animate = Animate::create(animation);
+
+// run it and repeat it forever
+mySprite->runAction(RepeatForever::create(animate));
+```
+
+- move at variable speed
+using variable speed motion to simulate physic phenonmena to lessen the cost
+```cpp
+// create a sprite
+auto mySprite = Sprite::create("mysprite.png");
+
+// create a MoveBy Action to where we want the sprite to drop from.
+auto move = MoveBy::create(2, Vec2(200, dirs->getVisibleSize().height -
+ newSprite2->getContentSize().height));
+
+// create a BounceIn Ease Action
+auto move_ease_in = EaseBounceIn::create(move->clone() );
+auto move_ease_in_back = move_ease_in->reverse();
+
+// create a delay that is run in between sequence events
+auto delay = DelayTime::create(0.25f);
+
+// create the sequence of actions, in the order we want to run them
+auto seq1 = Sequence::create(move_ease_in, delay, move_ease_in_back,
+    delay->clone(), nullptr);
+
+// run the sequence and repeat forever.
+mySprite->runAction(RepeatForever::create(seq1));
+```
+
+### Clone & Rev
+
+- an action when run would change its state, cloning one would give a same but brand new action, ==clone won't copy the usage state!==
+
+```cpp
+sprite1 -> runAction(sequence -> reverse());
+sprite1 -> runAction(sequence);
+//get back
 ```
