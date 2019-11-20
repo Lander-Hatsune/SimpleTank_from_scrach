@@ -60,7 +60,7 @@ log("string s is %s", s);
 
 ## Sprite
 
-###Create
+### Create
 - can use a `.jpg` or `.png` or `.tiff` or `.webp` image 
 ```cpp
 // using the whole, raw (same resolution) pic
