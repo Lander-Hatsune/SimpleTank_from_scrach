@@ -25,3 +25,9 @@ _when we have listened to an event, then we should swallow it, instead of gettin
 
 ## keyboard event
 
+```cpp
+auto listener = EventListenerKeyboard::create();
+listener -> onKeyPressed = CC_CALLBACK_2(KeyboardTest::onKeyPressed, this);
+listener -> onKeyReleased = CC_CALLBACK_2(KayboardTest::onKeyReleased, this);
+
+```
